@@ -1,9 +1,16 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { IsOptional } from "class-validator";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Ticket } from '../../ticket/entities/ticket.entity';
+// import { IsOptional } from "class-validator";
 
 @Entity()
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -23,4 +30,6 @@ export class User extends BaseEntity {
 
   @Column()
   profile_picture: string;
+  @ManyToMany((_type) => Ticket, (ticket) => ticket.user, { eager: true })
+  ticket: Ticket[];
 }

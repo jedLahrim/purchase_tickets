@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 import { createWriteStream } from "fs";
 import { FileInterceptor } from "@nestjs/platform-express";
 
-@Controller('user')
-export class UserController {
-  constructor(private userService: UserService) {}
+@Controller('auth')
+export class AuthController {
+  constructor(private authService: AuthService) {}
 
   //Register
   @Post("/Register")
@@ -15,7 +15,7 @@ export class UserController {
     @Body()
     userDto: UserDto,
   ): Promise<User> {
-    return this.userService.Register(userDto);
+    return this.authService.Register(userDto);
   }
 
   @Get('/login')
@@ -23,7 +23,7 @@ export class UserController {
     @Body()
     userDto: UserDto,
   ): Promise<{ accessToken: string }> {
-    return this.userService.Login(userDto);
+    return this.authService.Login(userDto);
   }
   @Post("/Upload")
   @UseInterceptors(FileInterceptor("profile_picture"))

@@ -8,7 +8,7 @@ import { jwtPayload } from "./jwr-playload.interface";
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
-export class UserService {
+export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepo: Repository<User>,

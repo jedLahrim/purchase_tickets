@@ -6,7 +6,7 @@ export const typeormOptions: TypeOrmModuleOptions = {
   port: 8889,
   username: "root",
   password: "root",
-  database: "project-task",
+  database: "project_ticket",
   synchronize: true,
   autoLoadEntities: true
 };

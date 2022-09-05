@@ -2,7 +2,7 @@
 // import { PassportStrategy } from "@nestjs/passport";
 // import { ExtractJwt, Strategy } from "passport-jwt";
 // import { InjectRepository } from "@nestjs/typeorm";
-// import { User } from "./entities/user.entity";
+// import { User } from "./entities/auth.entity";
 // import { Repository } from "typeorm";
 // // import { JwtPayload } from "jsonwebtoken";
 // import { jwtPayload } from "./jwr-playload.interface";
@@ -21,10 +21,10 @@
 //
 //   async validate(payload: jwtPayload): Promise<User> {
 //     const { email } = payload;
-//     const user: User = await this.userRepo.findOneBy({ email });
-//     if (!user) {
+//     const auth: User = await this.userRepo.findOneBy({ email });
+//     if (!auth) {
 //       throw new UnauthorizedException();
 //     }
-//     return user;
+//     return auth;
 //   }
 // }
