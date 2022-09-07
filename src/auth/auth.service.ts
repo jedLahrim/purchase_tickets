@@ -1,24 +1,35 @@
-import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
-import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "./entities/user.entity";
-import { UserDto } from "./dto/user.dto";
-import * as bcrypt from "bcrypt";
-import { jwtPayload } from "./jwr-playload.interface";
-import { JwtService } from "@nestjs/jwt";
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { UserDto } from './dto/user.dto';
+import * as bcrypt from 'bcrypt';
+import { jwtPayload } from './jwr-playload.interface';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepo: Repository<User>,
-    private jwtService: JwtService
-  ) {
-  }
+    private jwtService: JwtService,
+  ) {}
 
   //Register a auth
   async Register(userDto: UserDto) {
-    const { first_name, last_name, phone_number, email, profile_picture, password } = userDto;
+    const {
+      first_name,
+      last_name,
+      phone_number,
+      email,
+      profile_picture,
+      password,
+    } = userDto;
     //saltPassword<>
     const salt = await bcrypt.genSalt();
     //HashPassword<>
@@ -29,7 +40,7 @@ export class AuthService {
       phone_number,
       email,
       profile_picture,
-      password: hashedPassword
+      password: hashedPassword,
     });
     // console.log('salt',salt)
     // console.log('hashedPassword',hashedPassword)
@@ -37,20 +48,21 @@ export class AuthService {
       const userPass = await this.userRepo.save(user);
       return userPass;
     } catch (error) {
-      if (error.code === "ER_DUP_ENTRY") {
-        throw new ConflictException("auth already exist");
+      console.log(error.code);
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new ConflictException('email already exist');
       } else {
         throw new InternalServerErrorException();
       }
     }
   }
 
-//Login
+  //Login
   async Login(userDto: UserDto): Promise<{ accessToken }> {
     const { email, password } = userDto;
     const user = await this.userRepo.findOne({ where: { email } });
     if (user && (await bcrypt.compare(password, user.password))) {
-      const payload: jwtPayload = { email };
+      const payload:jwtPayload = { email };
       const accessToken: string = this.jwtService.sign(payload);
       return { accessToken };
     } else {
@@ -58,4 +70,3 @@ export class AuthService {
     }
   }
 }
-

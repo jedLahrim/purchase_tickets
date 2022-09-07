@@ -2,10 +2,11 @@ import {
   BaseEntity,
   Column,
   Entity,
-  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Ticket } from '../../ticket/entities/ticket.entity';
+import { Event } from '../../event/entities/event.entity';
 // import { IsOptional } from "class-validator";
 
 @Entity()
@@ -22,7 +23,7 @@ export class User extends BaseEntity {
   @Column()
   phone_number: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -30,6 +31,13 @@ export class User extends BaseEntity {
 
   @Column()
   profile_picture: string;
-  @ManyToMany((_type) => Ticket, (ticket) => ticket.user, { eager: true })
+  @OneToMany((_type) => Ticket, (ticket) => ticket.user, {
+    eager: true,
+  })
   ticket: Ticket[];
+
+  @OneToMany((_type) => Event, (event) => event.user, {
+    eager: true,
+  })
+  event: Event[];
 }
