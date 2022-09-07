@@ -117,11 +117,11 @@ export class TicketService {
   }
 
   //delete ticket
-  async deleteTicket(id: string, user: User | any): Promise<void> {
-    const result = await this.ticketRep.delete({ id, user });
+  async deleteTicket(ticket_name: string, user: User | any): Promise<void> {
+    const result = await this.ticketRep.delete({ ticket_name, user });
 console.log(result)
     if (result.affected === 0) {
-      throw new NotFoundException(`Task with ID "${id}" not found`);
+      throw new NotFoundException(`Ticket with ID "${ticket_name}" not found`);
     }
   }
 }

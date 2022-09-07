@@ -70,8 +70,8 @@ export class TicketController {
     return this.ticketService.updateTicket(id, ticket_name, user);
   }
 
-  @Delete('/:id')
-  deleteTask(@Param('id') id: string, @GetUser() user: User): Promise<void> {
+  @Delete('/:ticket_name')
+  deleteTask(@Param('ticket_name') id: string, @GetUser() user: User): Promise<void> {
     return this.ticketService.deleteTicket(id,user);
   }
 }

@@ -46,10 +46,11 @@ export class EventsController {
   ): Promise<Event[]> {
     return this.eventService.findAll(filterDto, user);
   }
-  //Pagination by Event list
-  @Get('/:paginated')
+  // Pagination by Event list
+  @Get("/pagination")
   async index(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe)
+    page: number = 1,
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number = 20,
   ): Promise<Pagination<Event>> {
     limit = limit > 100 ? 100 : limit;
@@ -58,15 +59,15 @@ export class EventsController {
       limit,
     });
   }
-  @Get('/:id')
+  @Get('/:event_name')
   getTicketByEvent(
-    @Param('id') event_name: string,
+    @Param('event_name') event_name: string,
     @GetUser() user: User,
     ticket: Ticket,
   ): Promise<Event> {
     return this.eventService.getTicketByEvent(event_name, user, ticket);
   }
-  @Get('/:id')
+  @Get('/:id/eventById')
   getEventById(@Param('id') id: string, @GetUser() user: User): Promise<Event> {
     return this.eventService.getEventById(id, user);
   }
@@ -80,8 +81,8 @@ export class EventsController {
     const { event_name } = eventDto;
     return this.eventService.updateEvent(id, event_name, user);
   }
-  @Delete('/:id')
-  deleteTask(@Param('id') id: string, @GetUser() user: User): Promise<void> {
-    return this.eventService.deleteEvent(id, user);
+  @Delete('/:event_name')
+  deleteTask(@Param('event_name') event_name: string, @GetUser() user: User): Promise<void> {
+    return this.eventService.deleteEvent(event_name, user);
   }
 }

@@ -21,7 +21,6 @@ export class EventsService {
   constructor(
     @InjectRepository(Event)
     private eventRepo: Repository<Event>,
-    // private jwtService: JwtService,
   ) {}
 
   async createEvent(eventDto: EventDto, user: User): Promise<Event> {
@@ -119,18 +118,20 @@ export class EventsService {
     return event;
   }
 
-  async deleteEvent(id: string, user: User | any): Promise<void> {
-    const result = await this.eventRepo.delete({ id, user });
+  async deleteEvent(event_name: string, user: User | any): Promise<void> {
+    const result = await this.eventRepo.delete({ event_name, user });
     console.log(result);
     if (result.affected === 0) {
-      throw new NotFoundException(`Task with ID "${id}" not found`);
+      throw new NotFoundException(
+        `Event with event name "${event_name}" not found`,
+      );
     }
   }
 
   // async JwtAccess(eventDto: EventDto): Promise<{ accessToken }> {
   //   const { event_name } = eventDto;
   //   await this.eventRepo.findOne({ where: { event_name } });
-  //   const payload:jwtPayload = {event_name};
+  //   const payload: jwtPayload = { event_name };
   //   const accessToken: string = this.jwtService.sign(payload);
   //   return { accessToken };
   // }
