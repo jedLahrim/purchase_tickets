@@ -10,7 +10,11 @@ import { TicketDto } from './dto/ticket.dto';
 import { User } from '../auth/entities/user.entity';
 import { TicketFilterDto } from './dto/filter.dto';
 import { Event } from '../event/entities/event.entity';
-import { IPaginationOptions, paginate, Pagination } from "nestjs-typeorm-paginate";
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class TicketService {
@@ -39,8 +43,7 @@ export class TicketService {
       user,
       event,
     });
-    await this.ticketRep.save(ticket);
-    return ticket;
+    return this.ticketRep.save(ticket);
   }
 
   // getAll Tickets
@@ -89,6 +92,7 @@ export class TicketService {
       throw new InternalServerErrorException();
     }
   }
+
   async getTicketById(id: string, user: User | any): Promise<Ticket> {
     const found = await this.ticketRep.findOne({ where: { id, user } });
     if (!found) {
@@ -96,12 +100,13 @@ export class TicketService {
     }
     return found;
   }
+
   // Paginated Tickets
   async paginate(options: IPaginationOptions): Promise<Pagination<Ticket>> {
     const queryBuilder = this.ticketRep.createQueryBuilder('t');
     queryBuilder.orderBy('t.ticket_name', 'DESC'); // Or whatever you need to do
 
-    return  paginate<Ticket>(queryBuilder, options);
+    return paginate<Ticket>(queryBuilder, options);
   }
 
   // update ticket name
@@ -119,9 +124,12 @@ export class TicketService {
   //delete ticket
   async deleteTicket(ticket_name: string, user: User | any): Promise<void> {
     const result = await this.ticketRep.delete({ ticket_name, user });
-console.log(result)
+    console.log(result);
     if (result.affected === 0) {
-      throw new NotFoundException(`Ticket with ID "${ticket_name}" not found`);
+      throw new NotFoundException({
+        code: 10,
+        message: `Ticket with ID "${ticket_name}" not found`,
+      });
     }
   }
 }

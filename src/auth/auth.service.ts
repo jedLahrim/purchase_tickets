@@ -58,13 +58,13 @@ export class AuthService {
   }
 
   //Login
-  async Login(userDto: UserDto): Promise<{ accessToken }> {
+  async Login(userDto: UserDto): Promise<any> {
     const { email, password } = userDto;
     const user = await this.userRepo.findOne({ where: { email } });
     if (user && (await bcrypt.compare(password, user.password))) {
-      const payload:jwtPayload = { email };
+      const payload: jwtPayload = { email };
       const accessToken: string = this.jwtService.sign(payload);
-      return { accessToken };
+      return { access_token: accessToken };
     } else {
       throw new UnauthorizedException(`email or password is incorrect`);
     }

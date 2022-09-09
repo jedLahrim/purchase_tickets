@@ -1,15 +1,19 @@
 import {
   Body,
-  Controller, DefaultValuePipe,
+  Controller,
+  DefaultValuePipe,
   Delete,
   Get,
-  Param, ParseIntPipe,
+  Param,
+  ParseIntPipe,
   Patch,
   Post,
   // Put,
   Query,
-  UseGuards
-} from "@nestjs/common";
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { TicketDto } from './dto/ticket.dto';
 import { User } from '../auth/entities/user.entity';
 import { Ticket } from './entities/ticket.entity';
@@ -19,7 +23,7 @@ import { TicketFilterDto } from './dto/filter.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetEvent } from '../event/Getevent.Decorator';
 import { Event } from '../event/entities/event.entity';
-import { Pagination } from "nestjs-typeorm-paginate";
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('ticket')
 @UseGuards(AuthGuard())
@@ -34,7 +38,7 @@ export class TicketController {
     return this.ticketService.createTicket(ticketDto, user, event);
   }
 
-  @Get('/get-ticket')
+  @Get('')
   findAll(
     @Query() filterDto: TicketFilterDto,
     @GetUser() user: User,
@@ -42,7 +46,7 @@ export class TicketController {
     return this.ticketService.findAll(filterDto, user);
   }
 
-  @Get('/:id/getTicketById')
+  @Get('/:id')
   getTicketById(
     @Param('id') id: string,
     @GetUser() user: User,
@@ -70,8 +74,8 @@ export class TicketController {
     return this.ticketService.updateTicket(id, ticket_name, user);
   }
 
-  @Delete('/:ticket_name')
-  deleteTask(@Param('ticket_name') id: string, @GetUser() user: User): Promise<void> {
-    return this.ticketService.deleteTicket(id,user);
+  @Delete('/:id')
+  deleteTask(@Param('id') id: string, @GetUser() user: User): Promise<void> {
+    return this.ticketService.deleteTicket(id, user);
   }
 }

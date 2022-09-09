@@ -1,12 +1,19 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Exclude } from "class-transformer";
-import { User } from "../../auth/entities/user.entity";
-import { Event } from "../../event/entities/event.entity";
-import { IsOptional } from "class-validator";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+} from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { User } from '../../auth/entities/user.entity';
+import { Event } from '../../event/entities/event.entity';
+// import { IsOptional } from 'class-validator';
 
 @Entity()
 export class Ticket extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -21,12 +28,19 @@ export class Ticket extends BaseEntity {
   @Column()
   ticket_updated_at: Date;
 
-
-  @ManyToOne((_type) => User, (user) => user.ticket, { eager: false })
+  @ManyToOne((_type) => User, (user) => user.ticket, {
+    eager: false,
+    onDelete: 'CASCADE',
+  })
   @Exclude({ toPlainOnly: true })
   user: User;
 
-  @ManyToOne((_type) => Event, (event) => event.ticket, { eager: false })
+  @ManyToOne((_type) => Event, (event) => event.ticket, {
+    eager: false,
+    onDelete: 'CASCADE',
+  })
   @Exclude({ toPlainOnly: true })
   event: Event;
+  @RelationId((ticket: Ticket) => ticket.event)
+  eventId: Event;
 }

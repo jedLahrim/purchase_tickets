@@ -4,8 +4,8 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+  PrimaryGeneratedColumn, RelationId
+} from "typeorm";
 import { Ticket } from '../../ticket/entities/ticket.entity';
 import { Exclude } from 'class-transformer';
 import { User } from '../../auth/entities/user.entity';
@@ -32,10 +32,17 @@ export class Event extends BaseEntity {
 
   @OneToMany((_type) => Ticket, (ticket) => ticket.event, {
     eager: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   ticket: Ticket[];
+  @RelationId((event: Event) => event.ticket)
+  ticketId: Ticket;
 
-  @ManyToOne((_type) => User, (user) => user.event, { eager: false })
+  @ManyToOne((_type) => User, (user) => user.event, {
+    eager: false,
+    onDelete: 'CASCADE',
+  })
   @Exclude({ toPlainOnly: true })
   user: User;
 }

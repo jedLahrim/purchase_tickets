@@ -4,7 +4,7 @@
 // import { InjectRepository } from '@nestjs/typeorm';
 // import { Repository } from 'typeorm';
 // // import { JwtPayload } from "jsonwebtoken";
-// import { Event } from './entities/event.entity';
+// import { Event } from './entities/event.Payment.entity.ts';
 // import { jwtPayload } from "./jwr-playload.interface";
 //
 //
