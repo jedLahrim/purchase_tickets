@@ -11,8 +11,6 @@ import {
   // Put,
   Query,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { TicketDto } from './dto/ticket.dto';
 import { User } from '../auth/entities/user.entity';
